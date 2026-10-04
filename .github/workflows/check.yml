@@ -1,0 +1,33 @@
+name: Check and notify site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  # После проверки просим сайт пересобраться, чтобы он забрал новые данные о прошивках.
+  notify-site:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for the files host to publish the new .bin
+        run: sleep 60
+      - name: Rebuild the site
+        env:
+          HOOK: ${{ secrets.SITE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "SITE_DEPLOY_HOOK не задан, пересборка сайта пропущена"; exit 0; fi
+          curl -fsS -X POST "$HOOK"

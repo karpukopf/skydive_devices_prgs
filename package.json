@@ -1,0 +1,12 @@
+{
+  "name": "skydive-firmware",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "new-fw": "node scripts/new-firmware.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "devDependencies": {
+    "yaml": "^2.8.0"
+  }
+}
