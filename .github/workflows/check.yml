@@ -23,7 +23,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for the files host to publish the new .bin
+      - name: Wait for the files host to publish the new .prg
         run: sleep 60
       - name: Rebuild the site
         env:

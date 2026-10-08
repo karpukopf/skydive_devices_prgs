@@ -34,22 +34,22 @@ for (const device of readdirSync(root)) {
     for (const l of ['es', 'ru']) if (!d.summary?.[l] || !String(d.summary[l]).trim()) warn(`нет перевода summary.${l}, на сайте покажется английский`);
     if (!/^[a-f0-9]{64}$/.test(String(d.sha256))) err('sha256 должен быть 64 символа 0-9a-f');
 
-    const expectedUrl = base && `${base}/${device}/${version}.bin`;
+    const expectedUrl = base && `${base}/${device}/${version}.prg`;
     if (expectedUrl && d.url !== expectedUrl) err(`url должен быть ${expectedUrl}`);
 
-    const bin = `${dir}/${version}.bin`;
+    const bin = `${dir}/${version}.prg`;
     if (!existsSync(bin)) {
-      if (!d.draft) err(`нет файла ${device}/${version}.bin (добавьте его или поставьте draft: true)`);
+      if (!d.draft) err(`нет файла ${device}/${version}.prg (добавьте его или поставьте draft: true)`);
     } else {
       const data = readFileSync(bin);
       const actual = createHash('sha256').update(data).digest('hex');
-      if (actual !== d.sha256) err(`sha256 не совпадает с файлом .bin (в файле ${actual})`);
+      if (actual !== d.sha256) err(`sha256 не совпадает с файлом .prg (в файле ${actual})`);
       if (data.length !== d.size) err(`size ${d.size}, а файл ${data.length} байт`);
     }
   }
-  // .bin без описания: такой файл лежит на хостинге, но на сайте его нет
-  for (const name of readdirSync(dir).filter((n) => n.endsWith('.bin'))) {
-    if (!existsSync(`${dir}/${name.replace(/\.bin$/, '.md')}`)) warnings.push(`${device}/${name}: нет описания .md`);
+  // .prg без описания: такой файл лежит на хостинге, но на сайте его нет
+  for (const name of readdirSync(dir).filter((n) => n.endsWith('.prg'))) {
+    if (!existsSync(`${dir}/${name.replace(/\.prg$/, '.md')}`)) warnings.push(`${device}/${name}: нет описания .md`);
   }
 }
 

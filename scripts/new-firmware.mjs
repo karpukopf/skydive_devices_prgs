@@ -1,13 +1,13 @@
-// Использование: npm run new-fw -- arient 1.4.3 путь/к/файлу.bin "Short summary in English"
-// Для бета-версии добавьте суффикс: npm run new-fw -- arient 1.5.0-beta.1 путь/к/файлу.bin "..."
-// Копирует файл в firmware/<прибор>/<версия>.bin, считает SHA-256 и размер
+// Использование: npm run new-fw -- arient 1.4.3 путь/к/файлу.prg "Short summary in English"
+// Для бета-версии добавьте суффикс: npm run new-fw -- arient 1.5.0-beta.1 путь/к/файлу.prg "..."
+// Копирует файл в firmware/<прибор>/<версия>.prg, считает SHA-256 и размер
 // и создаёт заготовку firmware/<прибор>/<версия>.md с блоками для en, es, ru.
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, copyFileSync, existsSync, mkdirSync } from 'node:fs';
 
 const [device, version, file, summary = 'Short summary of the changes'] = process.argv.slice(2);
 if (!device || !version || !file) {
-  console.error('Использование: npm run new-fw -- <прибор> <версия> <файл.bin> ["summary по-английски"]');
+  console.error('Использование: npm run new-fw -- <прибор> <версия> <файл.prg> ["summary по-английски"]');
   process.exit(1);
 }
 if (!/^[a-z0-9-]+$/.test(device)) { console.error('Ключ прибора: маленькие латинские буквы, цифры и дефис (например arient)'); process.exit(1); }
@@ -19,7 +19,7 @@ if (!base) { console.error('В config.json не задан filesBaseUrl'); proce
 
 const dir = `firmware/${device}`;
 const md = `${dir}/${version}.md`;
-const bin = `${dir}/${version}.bin`;
+const bin = `${dir}/${version}.prg`;
 if (existsSync(md) || existsSync(bin)) {
   console.error(`Версия ${version} уже существует. Опубликованные файлы не заменяют: выпустите новую версию.`);
   process.exit(1);
@@ -35,7 +35,7 @@ writeFileSync(md, `---
 device: ${device}
 version: ${version}
 date: ${today}
-url: ${base}/${device}/${version}.bin
+url: ${base}/${device}/${version}.prg
 sha256: ${sha256}
 size: ${data.length}
 # minAppVersion: 2.1.0
