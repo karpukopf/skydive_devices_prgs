@@ -28,7 +28,9 @@ for (const device of readdirSync(root)) {
     if (d.device !== device) err(`device: «${d.device}», а лежит в папке «${device}»`);
     if (String(d.version) !== version) err(`version: «${d.version}», а имя файла «${version}»`);
     if (!/^\d+\.\d+\.\d+(-beta\.\d+)?$/.test(String(d.version))) err('версия должна быть вида 1.4.2 (стабильная) или 1.5.0-beta.1 (бета)');
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(d.date)) || Number.isNaN(Date.parse(String(d.date)))) err('date должна быть вида 2026-09-20');
+    const ds = String(d.date);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ds) || new Date(ds).toISOString().slice(0, 10) !== ds) err('date должна быть существующей датой вида 2026-09-20');
+    else if (Date.parse(ds) > Date.now() + 36 * 3600 * 1000) warn(`дата ${ds} в будущем, проверьте опечатку`);
     if (d.minAppVersion !== undefined && !/^\d+\.\d+\.\d+$/.test(String(d.minAppVersion))) err('minAppVersion должна быть вида 2.1.0');
     if (!d.summary?.en || !String(d.summary.en).trim()) err('summary.en обязателен');
     for (const l of ['es', 'ru']) if (!d.summary?.[l] || !String(d.summary[l]).trim()) warn(`нет перевода summary.${l}, на сайте покажется английский`);
