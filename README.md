@@ -107,7 +107,7 @@ git push
 device: arient
 version: 1.4.2
 date: 2026-09-20
-url: https://files.example.com/arient/1.4.2.prg
+url: https://skydive-files.pages.dev/arient/1.4.2.prg
 sha256: <64 символа, считает скрипт>
 size: 184320
 minAppVersion: 2.1.0        # необязательно
