@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "new-fw": "node scripts/new-firmware.mjs",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+	"build": "node scripts/build.mjs"
   },
   "devDependencies": {
     "yaml": "^2.9.1"
